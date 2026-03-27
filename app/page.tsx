@@ -1,65 +1,102 @@
-import Image from "next/image";
+/* ============================================================
+   Overview Page — Fissionaire Nuclear Intelligence Dashboard
+   StatsRow, TimelineChart, CategoryDonut, Latest 10 signals.
+   Server component that fetches data at request time.
+   ============================================================ */
 
-export default function Home() {
+import { getStaticData } from "@/lib/notion";
+import StatsRow from "@/components/dashboard/StatsRow";
+import TimelineChart from "@/components/dashboard/TimelineChart";
+import CategoryDonut from "@/components/dashboard/CategoryDonut";
+import SignalTable from "@/components/dashboard/SignalTable";
+import Card from "@/components/ui/Card";
+import { Radio, AlertTriangle, CalendarDays, Database } from "lucide-react";
+
+export default async function OverviewPage() {
+  const { signals, sources } = await getStaticData();
+
+  // Compute stats
+  const totalSignals = signals.length;
+  const criticalAlerts = signals.filter((s) => s.urgency === "Critical").length;
+
+  // Signals from this week (last 7 days)
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const thisWeekSignals = signals.filter((s) => {
+    if (!s.dateCaptured) return false;
+    return new Date(s.dateCaptured) >= weekAgo;
+  }).length;
+
+  const activeSources = sources.filter((s) => s.active).length;
+
+  const stats = [
+    {
+      icon: Radio,
+      value: totalSignals,
+      label: "Total Signals",
+      color: "#00B7FF",
+    },
+    {
+      icon: AlertTriangle,
+      value: criticalAlerts,
+      label: "Critical Alerts",
+      color: "#EF4C23",
+    },
+    {
+      icon: CalendarDays,
+      value: thisWeekSignals,
+      label: "This Week",
+      color: "#C0FF9E",
+    },
+    {
+      icon: Database,
+      value: activeSources,
+      label: "Active Sources",
+      color: "#CC66FF",
+    },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* Page heading */}
+      <div>
+        <h2 className="text-lg font-display font-black uppercase tracking-wider text-text-primary">
+          Overview
+        </h2>
+        <p className="text-sm font-body text-text-muted mt-1">
+          Nuclear intelligence at a glance
+        </p>
+      </div>
+
+      {/* Stats */}
+      <StatsRow stats={stats} />
+
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Timeline chart — takes 2 cols */}
+        <Card className="lg:col-span-2 p-5" noHover>
+          <h3 className="text-xs font-display font-bold uppercase tracking-wider text-text-muted mb-4">
+            Signal Volume by Week
+          </h3>
+          <TimelineChart signals={signals} />
+        </Card>
+
+        {/* Category donut */}
+        <Card className="p-5" noHover>
+          <h3 className="text-xs font-display font-bold uppercase tracking-wider text-text-muted mb-4">
+            Signals by Category
+          </h3>
+          <CategoryDonut signals={signals} />
+        </Card>
+      </div>
+
+      {/* Latest signals table */}
+      <div>
+        <h3 className="text-xs font-display font-bold uppercase tracking-wider text-text-muted mb-4">
+          Latest Signals
+        </h3>
+        <SignalTable signals={signals} limit={10} />
+      </div>
     </div>
   );
 }

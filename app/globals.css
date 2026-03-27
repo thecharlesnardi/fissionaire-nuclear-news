@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   Fissionaire Nuclear Intelligence Dashboard
+   Brand Bible Tokens — Tailwind v4 CSS-based config
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ---- Colors: Backgrounds ---- */
+  --color-bg-primary: #0b0b0b;
+  --color-bg-card: #1a1a1a;
+  --color-bg-raised: #1f1f1f;
+  --color-bg-interactive: #232323;
+
+  /* ---- Colors: Text ---- */
+  --color-text-primary: #e8e6e3;
+  --color-text-secondary: #a8a5a0;
+  --color-text-muted: #706d68;
+
+  /* ---- Colors: Blue ---- */
+  --color-blue-flat: #00b7ff;
+  --color-blue-start: #018dff;
+  --color-blue-end: #02a2fe;
+
+  /* ---- Colors: Orange ---- */
+  --color-orange-flat: #f26522;
+  --color-orange-start: #f47e20;
+  --color-orange-end: #ef4c23;
+
+  /* ---- Colors: Accent ---- */
+  --color-lime: #c0ff9e;
+  --color-lime-deep: #9ecc7e;
+  --color-magenta: #cc66ff;
+
+  /* ---- Colors: Category/Data Viz ---- */
+  --color-cat-regulatory: #018dff;
+  --color-cat-commercial: #f26522;
+  --color-cat-supply-chain: #c0ff9e;
+  --color-cat-sentiment: #cc66ff;
+  --color-cat-investment: #02a2fe;
+  --color-cat-policy: #f47e20;
+  --color-cat-technical: #9ecc7e;
+  --color-cat-competitor: #ef4c23;
+
+  /* ---- Colors: Urgency ---- */
+  --color-urgency-critical: #ef4c23;
+  --color-urgency-high: #f47e20;
+  --color-urgency-medium: #02a2fe;
+  --color-urgency-low: #706d68;
+
+  /* ---- Colors: Relevance ---- */
+  --color-relevance-direct: #c0ff9e;
+  --color-relevance-adjacent: #02a2fe;
+  --color-relevance-market: #f47e20;
+  --color-relevance-background: #706d68;
+
+  /* ---- Colors: Borders ---- */
+  --color-border-default: rgba(255, 255, 255, 0.1);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+
+  /* ---- Fonts ---- */
+  --font-display: "Inter", sans-serif;
+  --font-body: "Outfit", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  /* ---- Radius ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* ---- Shadows ---- */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-glow-blue: 0 0 20px rgba(0, 183, 255, 0.15);
+  --shadow-glow-orange: 0 0 20px rgba(242, 101, 34, 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---- CSS Custom Properties (Brand Bible Section 14) ---- */
+:root {
+  --gradient-blue: linear-gradient(135deg, #018dff, #02a2fe);
+  --gradient-orange: linear-gradient(135deg, #f47e20, #ef4c23);
+  --gradient-dark: linear-gradient(180deg, #1a1a1a 0%, #0b0b0b 100%);
 }
 
+/* ---- Base Styles ---- */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0b0b0b;
+  color: #e8e6e3;
+  font-family: "Outfit", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- Utility: Blue Gradient Text ---- */
+.text-gradient-blue {
+  background: linear-gradient(135deg, #018dff, #02a2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Utility: Orange Gradient Text ---- */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #f47e20, #ef4c23);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
